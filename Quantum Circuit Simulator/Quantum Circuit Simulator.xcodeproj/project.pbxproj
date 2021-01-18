@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,9 @@
 		949450722540972900E8E79C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 949450712540972900E8E79C /* Assets.xcassets */; };
 		949450752540972900E8E79C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 949450742540972900E8E79C /* Preview Assets.xcassets */; };
 		949450782540972900E8E79C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 949450762540972900E8E79C /* LaunchScreen.storyboard */; };
+		9494DFD125AE116800EF4894 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494DFD025AE116800EF4894 /* Constants.swift */; };
+		9494DFD525AE1F0C00EF4894 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9494DFD425AE1F0C00EF4894 /* Alamofire */; };
+		9494DFD825AE20B000EF4894 /* DropArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494DFD725AE20B000EF4894 /* DropArea.swift */; };
 		94E2B0422577CBB7000F7175 /* CircuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E2B0412577CBB7000F7175 /* CircuitView.swift */; };
 		94E2B0492577CC04000F7175 /* GateOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E2B0482577CC04000F7175 /* GateOptions.swift */; };
 		94E2B04C2577D126000F7175 /* Gate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E2B04B2577D126000F7175 /* Gate.swift */; };
@@ -23,11 +26,13 @@
 		949450682540972800E8E79C /* Quantum Circuit Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quantum Circuit Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9494506B2540972800E8E79C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9494506D2540972800E8E79C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9494506F2540972800E8E79C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; usesTabs = 1; };
+		9494506F2540972800E8E79C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = "Quantum Circuit Simulator/ContentView.swift"; sourceTree = SOURCE_ROOT; usesTabs = 1; };
 		949450712540972900E8E79C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		949450742540972900E8E79C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		949450772540972900E8E79C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		949450792540972900E8E79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9494DFD025AE116800EF4894 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		9494DFD725AE20B000EF4894 /* DropArea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropArea.swift; sourceTree = "<group>"; };
 		94E2B0412577CBB7000F7175 /* CircuitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircuitView.swift; path = "Quantum Circuit Simulator/CircuitView.swift"; sourceTree = SOURCE_ROOT; };
 		94E2B0482577CC04000F7175 /* GateOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateOptions.swift; sourceTree = "<group>"; };
 		94E2B04B2577D126000F7175 /* Gate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gate.swift; sourceTree = "<group>"; };
@@ -39,6 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9494DFD525AE1F0C00EF4894 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +73,9 @@
 				9494506B2540972800E8E79C /* AppDelegate.swift */,
 				9494506D2540972800E8E79C /* SceneDelegate.swift */,
 				9494506F2540972800E8E79C /* ContentView.swift */,
+				9494DFD025AE116800EF4894 /* Constants.swift */,
 				94E2B0412577CBB7000F7175 /* CircuitView.swift */,
+				9494DFD725AE20B000EF4894 /* DropArea.swift */,
 				94E2B04E2577D8B9000F7175 /* Wire.swift */,
 				94E2B0482577CC04000F7175 /* GateOptions.swift */,
 				94E2B04B2577D126000F7175 /* Gate.swift */,
@@ -103,6 +111,9 @@
 			dependencies = (
 			);
 			name = "Quantum Circuit Simulator";
+			packageProductDependencies = (
+				9494DFD425AE1F0C00EF4894 /* Alamofire */,
+			);
 			productName = "Quantum Circuit Simulator";
 			productReference = 949450682540972800E8E79C /* Quantum Circuit Simulator.app */;
 			productType = "com.apple.product-type.application";
@@ -130,6 +141,9 @@
 				Base,
 			);
 			mainGroup = 9494505F2540972800E8E79C;
+			packageReferences = (
+				9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = 949450692540972800E8E79C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -157,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9494DFD825AE20B000EF4894 /* DropArea.swift in Sources */,
 				9494506C2540972800E8E79C /* AppDelegate.swift in Sources */,
 				9494506E2540972800E8E79C /* SceneDelegate.swift in Sources */,
 				94E2B04F2577D8B9000F7175 /* Wire.swift in Sources */,
@@ -164,6 +179,7 @@
 				949450702540972800E8E79C /* ContentView.swift in Sources */,
 				94E2B04C2577D126000F7175 /* Gate.swift in Sources */,
 				94E2B0492577CC04000F7175 /* GateOptions.swift in Sources */,
+				9494DFD125AE116800EF4894 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,6 +377,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9494DFD425AE1F0C00EF4894 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 949450602540972800E8E79C /* Project object */;
 }

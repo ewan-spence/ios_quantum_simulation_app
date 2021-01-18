@@ -8,37 +8,36 @@
 import SwiftUI
 
 struct CircuitView: View {
-    @State var numQubits: Int = 1
+    @Binding var circuit: [[String]]
     
-    @State var qubits: [Int] = [1]
+    @Binding var dropSpots: [CGRect]
     
-    @State var circuit: [Int: [String]] = [1:[]]
+    @Binding var isDragging: Bool
+    @Binding var draggedGate: String
     
     var body: some View {
         ScrollView([.horizontal, .vertical]){
             VStack {
-                ForEach(qubits, id: \.self, content: {qNum in
-                    Wire(qNum: qNum, gates: circuit[qNum]!)
-                        .contextMenu(ContextMenu(menuItems: {
-                            Text("Delete Wire")
-                                .foregroundColor(.red)
-                                .onTapGesture {
-                                    var temp = qNum
-                                    while circuit[temp+1] != nil {
-                                        circuit[temp] = circuit[temp+1]
-                                        temp += 1
-                                    }
+                ForEach(0..<circuit[0].count, id: \.self, content: {qNum in
+                    Wire(qNum: qNum, dropSpots: $dropSpots, circuit: $circuit, gates: [], isDragging: $isDragging, draggedGate: $draggedGate)
+                        .contextMenu(menuItems: {
+                            Button("Remove Wire", action: {
+                                for columnIndex in 0..<circuit.count {
+                                    circuit[columnIndex].remove(at: qNum)
                                 }
-                        }))
+                            })
+                        })
                 })
                 
                 HStack {
                     Image(systemName: "plus.circle")
                         .font(.system(size: 25))
                         .onTapGesture(perform: {
-                            circuit[numQubits + 1] = []
-                            numQubits += 1
+                            for colIndex in 0..<circuit.count {
+                                circuit[colIndex].append("0")
+                            }
                         })
+                        .disabled(circuit[0].count > 10)
                     Spacer()
                 }
                 .padding()
@@ -46,11 +45,5 @@ struct CircuitView: View {
                 Spacer()
             }
         }
-    }
-}
-
-struct CircuitView_Previews: PreviewProvider {
-    static var previews: some View {
-        CircuitView()
     }
 }

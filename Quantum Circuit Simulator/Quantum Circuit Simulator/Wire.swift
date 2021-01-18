@@ -9,60 +9,55 @@ import SwiftUI
 
 struct Wire: View {
     @State var qNum: Int
+    @Binding var dropSpots: [CGRect]
+    @Binding var circuit: [[String]]
+    @State var gates: [String]
     
-    @State var gates: [String] = []
+    @State private var active: Int = -1
     
-    @State var isDragging: Bool = false
-    @State var dropOffset: CGFloat = 12
+    @Binding var isDragging: Bool
+    @Binding var draggedGate: String
     
     var screenWidth = UIScreen.main.bounds.size.width
     
     var body: some View {
-        ZStack {
+        HStack {
             HStack {
+                (Text("Q")
+                    .font(.system(size: 20))
+                    +
+                    Text(String(qNum))
+                    .font(.system(size: 15))
+                    .baselineOffset(-1))
+            }.padding()
+            
+            Spacer()
+            
+            ZStack {
+                Rectangle()
+                    .frame(width: screenWidth * 0.8, height: 1)
+                    .padding(.trailing)
                 HStack {
-                    (Text("Q")
-                        .font(.system(size: 20))
-                        +
-                        Text(String(qNum))
-                        .font(.system(size: 15))
-                        .baselineOffset(-1))
-                }.padding()
-                
-                Spacer()
-                
-                ZStack {
-                    Rectangle()
-                        .frame(width: screenWidth * 0.8, height: 1)
-                        .padding(.trailing)
-                    HStack {
-                        
-                        ForEach(gates, id: \.self, content: {gate in
-                            Gate(gateName: gate)
-                        })
-                        
-                        if(isDragging) {
-                            
-                            Spacer()
-                                .frame(width:12)
-                            
-                            Image(systemName: "plus.app.fill")
-                                .font(.system(size: 45))
-                                .background(Color.white)
-                            
-                            Spacer()
+                    ForEach(gates, id: \.self) {gate in
+                        if (gate != "0") {
+                            Gate(gateName: gate, qNum: qNum, isDragging: $isDragging, draggedGate: $draggedGate, circuit: $circuit)
                         }
                     }
-                    
                 }
-                
             }
+        }
+        .onAppear {
+            circuit.forEach({column in
+                gates.append(column[qNum])
+            })
         }
     }
 }
 
+
+
 struct Wire_Previews: PreviewProvider {
     static var previews: some View {
-        Wire(qNum: 1)
+        Wire(qNum: 0, dropSpots: .constant([]), circuit: .constant([["H"], ["0"]]), gates: ["H"], isDragging: .constant(false), draggedGate: .constant(""))
     }
 }
