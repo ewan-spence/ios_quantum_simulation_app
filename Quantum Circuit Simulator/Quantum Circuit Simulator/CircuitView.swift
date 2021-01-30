@@ -10,7 +10,7 @@ import SwiftUI
 struct CircuitView: View {
     @Binding var circuit: [[String]]
     
-    @Binding var dropSpots: [CGRect]
+    @Binding var dropSpots: [Int: [CGRect]]
     
     @Binding var isDragging: Bool
     @Binding var draggedGate: String
@@ -19,7 +19,7 @@ struct CircuitView: View {
         ScrollView([.horizontal, .vertical]){
             VStack {
                 ForEach(0..<circuit[0].count, id: \.self, content: {qNum in
-                    Wire(qNum: qNum, dropSpots: $dropSpots, circuit: $circuit, gates: [], isDragging: $isDragging, draggedGate: $draggedGate)
+                    Wire(qNum: qNum, dropSpots: $dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: $draggedGate)
                         .contextMenu(menuItems: {
                             Button("Remove Wire", action: {
                                 for columnIndex in 0..<circuit.count {
@@ -43,6 +43,7 @@ struct CircuitView: View {
                 .padding()
                 
                 Spacer()
+                
             }
         }
     }

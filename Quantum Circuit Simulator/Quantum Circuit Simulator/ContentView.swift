@@ -10,11 +10,13 @@ import Alamofire
 struct ContentView: View {
 	@State var gates: [String] = Constants.gates
 	
-	@State var dropSpots: [CGRect] = []
-		
+	@State var dropSpots: [Int: [CGRect]] = [:] // QNum : Rectangle
+	
 	// Circuit is formatted as follows:
 	// Each item in the outer list is a 'column' of the visual circuit,
 	// Each item in each inner list is either '0' or the gate as represented in Constants.gates
+	// In the case of multiple qbit gates (CX/CCX etc.), the Control bit is represented as:
+	// '.' followed by the qbit number of the other control (if present), followed by the qbit number of the target
 	// For example:
 	//					 ┌───┐
 	//				q_0: ┤ H ├──■──────
@@ -22,19 +24,22 @@ struct ContentView: View {
 	//				q_1: ─────┤ X ├───
 	//						  └───┘
 	// Would be represented as
-	// [['H', '0'], ['.', 'X']]
-	@State var circuit: [[String]] = [[]]
+	// [['H', '0'], ['.1', 'X']]
+	@State var circuit: [[String]] = [["0"]]
 	// Some statements about this implementation:
 	// 		1. The number of qubits/wires = the `count` of each inner list
 	//		2. To check for connected control gates, we only need check the next element of the list
 	//		3. The ith qubit/wire is represented by the ith element of every inner list
 	//		4. Adding a qubit/wire is equivalent to adding a 0 to every column
 	//		5. Deleting the ith qubit/wire is equivalent to removing the ith element of every column
+	//		6. Deleting a gate is the equivalent of setting its value to 0
+	//		7. Removing a control from a CX/CCX gate should work fine without any special adjustments
 	
-	@State var isDragging = false
-	@State var draggedGate = ""
+	@State var isDragging: Bool = false
+	@State var draggedGate: String = ""
+	@State var originOfDrag: CGFloat = 0
 	
-	@State var isAlerting = false
+	@State var isAlerting: Bool = false
 	@State var alert = Alert(title: Text("Unknown Error"))
 	
 	var body: some View {
@@ -42,8 +47,7 @@ struct ContentView: View {
 			VStack {
 				Divider()
 				
-				GateOptions(gates: gates, circuit: $circuit, isDragging: $isDragging, dropSpots: $dropSpots, draggedGate: $draggedGate, isAlerting: $isAlerting, alert: $alert)
-					.padding()
+				GateOptions(gates: gates, circuit: $circuit, isDragging: $isDragging, draggedGate: $draggedGate, originOfDrag: $originOfDrag, isAlerting: $isAlerting, alert: $alert)
 				
 				Divider()
 				
@@ -59,7 +63,7 @@ struct ContentView: View {
 				HStack {
 					Spacer()
 					
-					Button("Execute", action: {})
+					Button("Execute", action: submitToApi)
 						.padding()
 						.background(
 							RoundedRectangle(cornerRadius: 12)
@@ -69,6 +73,19 @@ struct ContentView: View {
 				}
 			}
 		}
+		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag))
+		.onChange(of: circuit, perform: {_ in
+			
+			var numDeleted = 0
+			
+			for var colIndex in 1..<circuit.count {
+				colIndex = colIndex - numDeleted
+				if circuit[colIndex].elementsEqual(Array(repeating: "0", count: circuit[colIndex].count)) {
+					circuit.remove(at: colIndex)
+					numDeleted += 1
+				}
+			}
+		})
 	}
 	
 	func submitToApi() {
@@ -80,9 +97,11 @@ struct ContentView: View {
 			
 			switch response.result {
 			case let .success(value):
+				debugPrint(value)
 				break
 				
 			case let .failure(error):
+				debugPrint(error)
 				break
 			}
 		}
@@ -93,45 +112,44 @@ struct ContentView: View {
 }
 
 struct GateDropDelegate: DropDelegate {
-	@Binding var dropSpots: [CGRect]
-	
+	@State var dropSpots: [Int: [CGRect]]
 	@Binding var circuit: [[String]]
 	
+	@Binding var isDragging: Bool
 	@State var draggedGate: String
-		
-	@Binding var active: Int
-		
-	func validateDrop(info: DropInfo) -> Bool {
-
-		return true
-	}
+	@State var originOfDrag: CGFloat
 	
 	func performDrop(info: DropInfo) -> Bool {
+		isDragging = false
 		
-		let location = CGPoint(x: info.location.x, y: info.location.y)
-	
-		print(location)
-		for index in 0..<dropSpots.count {
-			let spot = dropSpots[index]
-			if spot.contains(location) {
-				self.active = index
-				
-				circuit[active].append(draggedGate)
+		let ycoord = info.location.y
+		let xcoord = info.location.x - originOfDrag
+		
+		for qNum in 0..<dropSpots.keys.count {
+			
+			for spotIndex in 0..<dropSpots[qNum]!.count {
+				let spot = dropSpots[qNum]![spotIndex]
+				if spot.minY < ycoord && ycoord < spot.maxY &&
+					spot.minX < xcoord && xcoord < spot.maxX {
+					
+					for colIndex in 0..<circuit.count {
+						if circuit[colIndex][qNum] == "0" {
+							circuit[colIndex][qNum] = draggedGate
+							circuit.append(Array(repeating: "0", count: circuit[colIndex].count))
+							return true
+						}
+					}
+					
+					var newCol = Array(repeating: "0", count: circuit[0].count)
+					
+					newCol[qNum] = draggedGate
+					
+					circuit.append(newCol)
+					
+					return true
+				}
 			}
 		}
-		dropSpots = []
-		return true
-	}
-	
-	func isInside(point: CGPoint, bounds: (CGPoint, CGPoint)) -> Bool {
-		return (bounds.0.x < point.x) && (point.x < bounds.1.x) && (bounds.0.y < point.y) && (point.y < bounds.1.y)
+		return false
 	}
 }
-
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ContentView()
-			.previewLayout(.fixed(width: 2436 / 3.0, height: 1125 / 3.0))
-	}
-}
-

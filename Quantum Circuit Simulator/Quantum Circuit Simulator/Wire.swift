@@ -9,9 +9,8 @@ import SwiftUI
 
 struct Wire: View {
     @State var qNum: Int
-    @Binding var dropSpots: [CGRect]
+    @Binding var dropSpots: [Int: [CGRect]]
     @Binding var circuit: [[String]]
-    @State var gates: [String]
     
     @State private var active: Int = -1
     
@@ -21,43 +20,49 @@ struct Wire: View {
     var screenWidth = UIScreen.main.bounds.size.width
     
     var body: some View {
-        HStack {
+        if qNum < circuit[0].count {
+            
             HStack {
-                (Text("Q")
-                    .font(.system(size: 20))
-                    +
-                    Text(String(qNum))
-                    .font(.system(size: 15))
-                    .baselineOffset(-1))
-            }.padding()
-            
-            Spacer()
-            
-            ZStack {
-                Rectangle()
-                    .frame(width: screenWidth * 0.8, height: 1)
-                    .padding(.trailing)
                 HStack {
-                    ForEach(gates, id: \.self) {gate in
-                        if (gate != "0") {
-                            Gate(gateName: gate, qNum: qNum, isDragging: $isDragging, draggedGate: $draggedGate, circuit: $circuit)
+                    (Text("Q")
+                        .font(.system(size: 20))
+                        +
+                        Text(String(qNum))
+                        .font(.system(size: 15))
+                        .baselineOffset(-1))
+                }.padding()
+                
+                Spacer()
+                
+                ZStack {
+                    Rectangle()
+                        .frame(width: screenWidth * 0.8, height: 1)
+                        .padding(.trailing)
+                    HStack {
+                        ForEach(0..<circuit.count, id: \.self) {colIndex in
+                            if (circuit[colIndex][qNum] != "0") {
+                                Gate(gateName: circuit[colIndex][qNum], qNum: qNum, colNum: colIndex, isDragging: .constant(false), draggedGate: .constant(""), originOfDrag: .constant(0), circuit: $circuit)
+                            } else {
+                                if isDragging {
+                                    DropArea(qNum: qNum, dropSpots: $dropSpots)
+                                        .padding(.leading)
+                                    Spacer()
+                                }
+                            }
                         }
+                        
+                        if (circuit.last![qNum] != "0") {
+                            if isDragging {
+                                DropArea(qNum: qNum, dropSpots: $dropSpots)
+                                    .padding(.leading)
+                                Spacer()
+                            }
+                        }
+                        
+                        Spacer()
                     }
                 }
             }
         }
-        .onAppear {
-            circuit.forEach({column in
-                gates.append(column[qNum])
-            })
-        }
-    }
-}
-
-
-
-struct Wire_Previews: PreviewProvider {
-    static var previews: some View {
-        Wire(qNum: 0, dropSpots: .constant([]), circuit: .constant([["H"], ["0"]]), gates: ["H"], isDragging: .constant(false), draggedGate: .constant(""))
     }
 }

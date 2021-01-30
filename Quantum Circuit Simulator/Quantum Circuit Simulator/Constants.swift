@@ -8,12 +8,12 @@
 import Foundation
 
 class Constants {
-    static let gates = ["H", "X", ".", "CX", "CCX"]
-    static let names = ["H": "Hadamard", "X": "Pauli-X", ".": "Control", "CX": "CNOT", "CCX": "Toffoli"]
+    static let gates = ["H", "X", "CX", "CCX"]
+    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli"]
     static let explanations = ["H": "This gate sets the probability of each state (|0> and |1>) to 0.5, making a value of 0 or 1 equally likely.",
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
-                               ".": "This gate returns true if the input qubit is 1, and false if the input qubit is 0. It does not alter the input.",
-                               "CX": "This gate flips the target qubit if the control qubit is "]
+                               "CX": "This gate flips the target qubit if and only if the control qubit is ON",
+                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON"]
     
     static let url = "www.example.com"
     
@@ -27,9 +27,7 @@ class Constants {
         
         for columnIndex in 0..<circuit.count  {
             let column = circuit[columnIndex]
-            
-            var hasBeenCX = false
-            
+                        
             for qNum in 0..<column.count {
                 let gate = column[qNum]
                 switch gate {
