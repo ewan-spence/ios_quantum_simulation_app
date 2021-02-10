@@ -10,7 +10,7 @@ import Alamofire
 struct ContentView: View {
 	@State var gates: [String] = Constants.gates
 	
-	@State var dropSpots: [Int: [CGRect]] = [:] // QNum : Rectangle
+	@State var dropSpots: [Int: [CGRect]] = [:] // QNum : [Rectangles on each wire]
 	
 	// Circuit is formatted as follows:
 	// Each item in the outer list is a 'column' of the visual circuit,
@@ -122,34 +122,46 @@ struct GateDropDelegate: DropDelegate {
 	func performDrop(info: DropInfo) -> Bool {
 		isDragging = false
 		
-		let ycoord = info.location.y
 		let xcoord = info.location.x - originOfDrag
+		let ycoord = info.location.y
 		
+		if let qNum = calcDropSpot(coords: xcoord, ycoord) {
+			
+			for colIndex in 0..<circuit.count {
+				if circuit[colIndex][qNum] == "0" {
+					circuit[colIndex][qNum] = draggedGate
+					circuit.append(Array(repeating: "0", count: circuit[colIndex].count))
+					return true
+				}
+			}
+			
+			var newCol = Array(repeating: "0", count: circuit[0].count)
+			
+			newCol[qNum] = draggedGate
+			
+			circuit.append(newCol)
+			
+			return true
+		}
+		
+		
+		return false
+	}
+	
+	func calcDropSpot(coords xcoord: CGFloat, _ ycoord: CGFloat) -> Int? {
 		for qNum in 0..<dropSpots.keys.count {
 			
-			for spotIndex in 0..<dropSpots[qNum]!.count {
+			let wireSpots = dropSpots[qNum]!
+			for spotIndex in 0..<wireSpots.count {
+				
 				let spot = dropSpots[qNum]![spotIndex]
 				if spot.minY < ycoord && ycoord < spot.maxY &&
 					spot.minX < xcoord && xcoord < spot.maxX {
 					
-					for colIndex in 0..<circuit.count {
-						if circuit[colIndex][qNum] == "0" {
-							circuit[colIndex][qNum] = draggedGate
-							circuit.append(Array(repeating: "0", count: circuit[colIndex].count))
-							return true
-						}
-					}
-					
-					var newCol = Array(repeating: "0", count: circuit[0].count)
-					
-					newCol[qNum] = draggedGate
-					
-					circuit.append(newCol)
-					
-					return true
+					return qNum
 				}
 			}
 		}
-		return false
+		return nil
 	}
 }
