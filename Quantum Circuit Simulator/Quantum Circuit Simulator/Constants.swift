@@ -23,52 +23,74 @@ class Constants {
         let numQBits = circuit[0].count
         
         qasmString.append("qreg q[\(numQBits)];\n")
-        qasmString.append("creg c[1];\n")
+        qasmString.append("creg c[\(numQBits)];\n")
         
-        for columnIndex in 0..<circuit.count  {
-            let column = circuit[columnIndex]
-                        
-            for qNum in 0..<column.count {
-                let gate = column[qNum]
-                
-                var op = ""
-                var params = "q[\(qNum)]"
-                
-                switch gate {
-                case "H":
-                    op = "h"
-                    break
-                    
-                case "X":
-                    op = "x"
-                    break
+        let gateApps = circuitToGateApplications(circuit: circuit)
+        
+        for app in gateApps {
+            var lineString = String(repeating: "c", count: app.control.count)
             
-                case _ where column[qNum].hasPrefix("."):
-                    
-                    if column[qNum].count == 2 {
-                        op = "cx"
-                        
-                        params += " q[\(column[qNum].suffix(1))]"
-                    }
-                    if column[qNum].count == 3 {
-                        op = "ccx"
-                        
-                        let otherGates = Array(column[qNum].suffix(2))
-                        let otherControl = otherGates[0]
-                        let target = otherGates[1]
-                        
-                        params += " q[\(otherControl)] q[\(target)]"
-                    }
-                    
-                    break
-                default:
-                    break
-                }
-                
-                qasmString.append("\(op) \(params);\n")
-            }
+            lineString.append(app.id + " ")
+            
+            app.control.forEach({controlQNum in
+                lineString.append("q[\(String(controlQNum))], ")
+            })
+            
+            lineString.append("q[\(String(app.target))]")
+            qasmString.append(lineString + ";\n")
+        }
+        
+        for qNum in 0..<numQBits {
+            qasmString.append("measure q[\(qNum)] -> c[\(qNum)];\n")
         }
         
         return qasmString
+    }
+    
+    public static func circuitToGateApplications(circuit: [[String]]) -> [GateApplication] {
+        var gateApps: [GateApplication] = []
+        
+        for columnIndex in 0..<circuit.count {
+            var column = circuit[columnIndex]
+            
+            var appMap: [Int: Int] = [:]
+            
+            for qNum in 0..<column.count {
+                if (column[qNum].hasPrefix(".")) {
+                    let targetQNum = Int(column[qNum].suffix(1))!
+                    
+                    if (appMap.keys.contains(targetQNum)) {                        
+                        gateApps[appMap[targetQNum]!].control.append(qNum)
+                    } else {
+                        let id = column[targetQNum].lowercased()
+                        
+                        let app = GateApplication(id: id, target: targetQNum, control: [qNum])
+                        
+                        gateApps.append(app)
+                        appMap[targetQNum] = gateApps.count-1
+                        
+                        column[targetQNum] = "0"
+                    }
+                    
+                    column[qNum] = "0"
+                }
+            }
+            
+            for qNum in 0..<column.count {
+                let gate = column[qNum]
+                
+                if gate != "0" {
+                    gateApps.append(GateApplication(id: gate.lowercased(), target: qNum, control: []))
+                }
+            }
+        }
+        
+        return gateApps
+    }
+    
+    struct GateApplication {
+        var id: String
+        var target: Int
+        var control: [Int]
     }
 }
