@@ -8,18 +8,20 @@
 import Foundation
 
 class Constants {
-    static let gates = ["H", "X", "CX", "CCX"]
-    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli"]
+    static let gates = ["H", "X", "CX", "CCX", "R(m)"]
+    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli", "R(m)" : "Phase Gate"]
     static let explanations = ["H": "This gate sets the probability of each state (|0> and |1>) to 0.5, making a value of 0 or 1 equally likely.",
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
                                "CX": "This gate flips the target qubit if and only if the control qubit is ON.\nDrag this to the location of the Target qubit.",
-                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit."]
+                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit.",
+                               "R(m)": ""]
     
-    static let url = "www.example.com"
+    static let url = "http://api.ewan-spence.com/execute/"
     
-    private static var qasmString: String = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\n"
+    private static var qasmString: String = ""
     
     public static func circuitToQasm(circuit: [[String]]) -> String {
+        qasmString = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\n"
         let numQBits = circuit[0].count
         
         qasmString.append("qreg q[\(numQBits)];\n")

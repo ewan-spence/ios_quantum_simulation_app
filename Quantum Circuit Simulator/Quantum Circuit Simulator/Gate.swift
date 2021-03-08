@@ -17,7 +17,7 @@ struct Gate: View {
     
     @Binding var isDragging: Bool
     @Binding var draggedGate: String
-    @Binding var originOfDrag: CGFloat
+    @Binding var originOfDrag: CGPoint
     
     @Binding var circuit: [[String]]
     @State var connectedQNums: [Int] = []
@@ -73,7 +73,7 @@ struct Gate: View {
                 .onDrag({
                     isDragging = true
                     draggedGate = gateName
-                    originOfDrag = geo.frame(in: .global).midX
+                    originOfDrag = CGPoint(x: geo.frame(in: .global).midX, y: geo.frame(in: .global).minY)
                     print(originOfDrag)
                     return NSItemProvider()
                 })

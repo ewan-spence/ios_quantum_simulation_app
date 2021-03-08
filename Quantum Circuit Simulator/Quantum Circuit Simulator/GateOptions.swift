@@ -14,7 +14,7 @@ struct GateOptions: View {
     
     @Binding var isDragging: Bool
     @Binding var draggedGate: String
-    @Binding var originOfDrag: CGFloat
+    @Binding var originOfDrag: CGPoint
     
     @Binding var isAlerting: Bool
     @Binding var alert: Alert
