@@ -15,11 +15,12 @@ class Constants {
                                "CX": "This gate flips the target qubit if and only if the control qubit is ON.\nDrag this to the location of the Target qubit.",
                                "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit."]
     
-    static let url = "www.example.com"
+    static let url = "http://api.ewan-spence.com/execute/"
     
-    private static var qasmString: String = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\n"
+    private static var qasmString: String = ""
     
     public static func circuitToQasm(circuit: [[String]]) -> String {
+        qasmString = "OPENQASM 2.0;\ninclude \"qelib1.inc\";\n"
         let numQBits = circuit[0].count
         
         qasmString.append("qreg q[\(numQBits)];\n")
