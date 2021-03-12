@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9470586C25FB935400F28215 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 9470586B25FB935400F28215 /* Numerics */; };
 		9494506C2540972800E8E79C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506B2540972800E8E79C /* AppDelegate.swift */; };
 		9494506E2540972800E8E79C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506D2540972800E8E79C /* SceneDelegate.swift */; };
 		949450702540972800E8E79C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506F2540972800E8E79C /* ContentView.swift */; };
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9470586C25FB935400F28215 /* Numerics in Frameworks */,
 				9494DFD525AE1F0C00EF4894 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,6 +118,7 @@
 			name = "Quantum Circuit Simulator";
 			packageProductDependencies = (
 				9494DFD425AE1F0C00EF4894 /* Alamofire */,
+				9470586B25FB935400F28215 /* Numerics */,
 			);
 			productName = "Quantum Circuit Simulator";
 			productReference = 949450682540972800E8E79C /* Quantum Circuit Simulator.app */;
@@ -146,6 +149,7 @@
 			mainGroup = 9494505F2540972800E8E79C;
 			packageReferences = (
 				9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				9470586A25FB935300F28215 /* XCRemoteSwiftPackageReference "swift-numerics" */,
 			);
 			productRefGroup = 949450692540972800E8E79C /* Products */;
 			projectDirPath = "";
@@ -383,6 +387,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		9470586A25FB935300F28215 /* XCRemoteSwiftPackageReference "swift-numerics" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-numerics.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -394,6 +406,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		9470586B25FB935400F28215 /* Numerics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9470586A25FB935300F28215 /* XCRemoteSwiftPackageReference "swift-numerics" */;
+			productName = Numerics;
+		};
 		9494DFD425AE1F0C00EF4894 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */;

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Numerics
 
 class Constants {
     static let gates = ["H", "X", "CX", "CCX", "R(m)"]
@@ -49,7 +50,7 @@ class Constants {
         return qasmString
     }
     
-    public static func circuitToGateApplications(circuit: [[String]]) -> [GateApplication] {
+    private static func circuitToGateApplications(circuit: [[String]]) -> [GateApplication] {
         var gateApps: [GateApplication] = []
         
         for columnIndex in 0..<circuit.count {
@@ -75,6 +76,15 @@ class Constants {
                     }
                     
                     column[qNum] = "0"
+                } else if (column[qNum].hasPrefix("R")) {
+                    let mSide = column[qNum].split(separator: "(")[1]
+                    
+                    let m = Int(mSide.dropLast())!
+                    
+                    let lambda = convert(toLambda: m)
+                    
+                    let app = GateApplication(id: "u1(\(lambda)", target: qNum, control: [])
+                    gateApps.append(app)
                 }
             }
             
@@ -88,6 +98,13 @@ class Constants {
         }
         
         return gateApps
+    }
+    
+    private static func convert(toLambda m: Int) -> Double {
+        let num = 2.0 * Double.pi
+        let denom = Double(2 ^ m)
+        
+        return .exp(num/denom)
     }
     
     struct GateApplication {
