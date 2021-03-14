@@ -44,7 +44,7 @@ struct ContentView: View {
 	
 	@State var isAskingForM: Bool = false
 	@State var m: String?
-	@State var pos: CGPoint?
+	@State var circIndex: CGPoint?
 	
 	var body: some View {
 		ZStack{
@@ -77,7 +77,7 @@ struct ContentView: View {
 				}
 			}
 		}
-		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag, pos: $pos, isAskingForM: $isAskingForM))
+		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag, pos: $circIndex, isAskingForM: $isAskingForM))
 		.onChange(of: circuit, perform: {_ in
 			
 			var numDeleted = 0
@@ -92,7 +92,7 @@ struct ContentView: View {
 		})
 		.textFieldAlert(isPresented: $isAskingForM, content: {
 			TextFieldAlert(title: "Enter a value for m", message: "", text: $m, action: {
-				circuit[Int(pos!.x)][Int(pos!.y)] = "R(\(m!))"
+				circuit[Int(circIndex!.x)][Int(circIndex!.y)] = "R(\(m!))"
 			})
 		})
 	}
@@ -161,7 +161,7 @@ struct GateDropDelegate: DropDelegate {
 					var newCol = Array(repeating: "0", count: circuit[0].count)
 					
 					if draggedGate == "R(m)" {
-						pos = CGPoint(x: circuit.count, y: qNum)
+						pos = CGPoint(x: circuit.count-1, y: qNum)	// qNum numbering starts at 0, .count starts at 1
 						isAskingForM = true
 						circuit.append(newCol)
 						return true

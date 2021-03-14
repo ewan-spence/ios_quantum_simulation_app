@@ -15,7 +15,7 @@ class Constants {
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
                                "CX": "This gate flips the target qubit if and only if the control qubit is ON.\nDrag this to the location of the Target qubit.",
                                "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit.",
-                               "R(m)": ""]
+                               "R(m)": "This gate performs a rotation in the z-axis based on an angle determined by a parameter m."]
     
     static let url = "http://api.ewan-spence.com/execute/"
     
@@ -83,8 +83,10 @@ class Constants {
                     
                     let lambda = convert(toLambda: m)
                     
-                    let app = GateApplication(id: "u1(\(lambda)", target: qNum, control: [])
+                    let app = GateApplication(id: "u1(\(lambda))", target: qNum, control: [])
                     gateApps.append(app)
+                    
+                    column[qNum] = "0"
                 }
             }
             
@@ -102,9 +104,9 @@ class Constants {
     
     private static func convert(toLambda m: Int) -> Double {
         let num = 2.0 * Double.pi
-        let denom = Double(2 ^ m)
+        let denom = pow(2.0, Double(m))
         
-        return .exp(num/denom)
+        return num/denom
     }
     
     struct GateApplication {
