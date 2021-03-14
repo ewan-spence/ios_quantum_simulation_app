@@ -37,10 +37,14 @@ struct ContentView: View {
 	
 	@State var isDragging: Bool = false
 	@State var draggedGate: String = ""
-	@State var originOfDrag: CGFloat = 0
+	@State var originOfDrag: CGPoint = CGPoint()
 	
 	@State var isAlerting: Bool = false
 	@State var alert = Alert(title: Text("Unknown Error"))
+	
+	@State var isAskingForM: Bool = false
+	@State var m: String?
+	@State var circIndex: CGPoint?
 	
 	var body: some View {
 		ZStack{
@@ -73,7 +77,7 @@ struct ContentView: View {
 				}
 			}
 		}
-		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag))
+		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag, pos: $circIndex, isAskingForM: $isAskingForM))
 		.onChange(of: circuit, perform: {_ in
 			
 			var numDeleted = 0
@@ -85,6 +89,11 @@ struct ContentView: View {
 					numDeleted += 1
 				}
 			}
+		})
+		.textFieldAlert(isPresented: $isAskingForM, content: {
+			TextFieldAlert(title: "Enter a value for m", message: "", text: $m, action: {
+				circuit[Int(circIndex!.x)][Int(circIndex!.y)] = "R(\(m!))"
+			})
 		})
 	}
 	
@@ -117,13 +126,15 @@ struct GateDropDelegate: DropDelegate {
 	
 	@Binding var isDragging: Bool
 	@State var draggedGate: String
-	@State var originOfDrag: CGFloat
+	@State var originOfDrag: CGPoint
+	@Binding var pos: CGPoint?
+	@Binding var isAskingForM: Bool
 	
 	func performDrop(info: DropInfo) -> Bool {
 		isDragging = false
 		
-		let ycoord = info.location.y
-		let xcoord = info.location.x - originOfDrag
+		let ycoord = info.location.y - originOfDrag.y
+		let xcoord = info.location.x
 		
 		for qNum in 0..<dropSpots.keys.count {
 			
@@ -134,7 +145,14 @@ struct GateDropDelegate: DropDelegate {
 					
 					for colIndex in 0..<circuit.count {
 						if circuit[colIndex][qNum] == "0" {
+							
+							if draggedGate == "R(m)" {
+								pos = CGPoint(x: colIndex, y: qNum)
+								isAskingForM = true
+								return true
+							}
 							circuit[colIndex][qNum] = draggedGate
+							
 							circuit.append(Array(repeating: "0", count: circuit[colIndex].count))
 							return true
 						}
@@ -142,6 +160,12 @@ struct GateDropDelegate: DropDelegate {
 					
 					var newCol = Array(repeating: "0", count: circuit[0].count)
 					
+					if draggedGate == "R(m)" {
+						pos = CGPoint(x: circuit.count-1, y: qNum)	// qNum numbering starts at 0, .count starts at 1
+						isAskingForM = true
+						circuit.append(newCol)
+						return true
+					}
 					newCol[qNum] = draggedGate
 					
 					circuit.append(newCol)

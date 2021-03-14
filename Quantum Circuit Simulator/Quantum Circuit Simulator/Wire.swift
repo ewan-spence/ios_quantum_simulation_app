@@ -41,7 +41,7 @@ struct Wire: View {
                     HStack {
                         ForEach(0..<circuit.count, id: \.self) {colIndex in
                             if (circuit[colIndex][qNum] != "0") {
-                                Gate(gateName: circuit[colIndex][qNum], qNum: qNum, colNum: colIndex, isDragging: .constant(false), draggedGate: .constant(""), originOfDrag: .constant(0), circuit: $circuit)
+                                Gate(gateName: circuit[colIndex][qNum], qNum: qNum, colNum: colIndex, isDragging: .constant(false), draggedGate: .constant(""), originOfDrag: .constant(CGPoint()), circuit: $circuit)
                             } else {
                                 if isDragging {
                                     DropArea(qNum: qNum, dropSpots: $dropSpots)

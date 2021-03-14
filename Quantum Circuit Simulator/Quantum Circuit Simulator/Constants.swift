@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import Numerics
 
 class Constants {
-    static let gates = ["H", "X", "CX", "CCX"]
-    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli"]
+    static let gates = ["H", "X", "CX", "CCX", "R(m)"]
+    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli", "R(m)" : "Phase Gate"]
     static let explanations = ["H": "This gate sets the probability of each state (|0> and |1>) to 0.5, making a value of 0 or 1 equally likely.",
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
                                "CX": "This gate flips the target qubit if and only if the control qubit is ON.\nDrag this to the location of the Target qubit.",
-                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit."]
+                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit.",
+                               "R(m)": "This gate performs a rotation in the z-axis based on an angle determined by a parameter m."]
     
     static let url = "http://api.ewan-spence.com/execute/"
     
@@ -48,7 +50,7 @@ class Constants {
         return qasmString
     }
     
-    public static func circuitToGateApplications(circuit: [[String]]) -> [GateApplication] {
+    private static func circuitToGateApplications(circuit: [[String]]) -> [GateApplication] {
         var gateApps: [GateApplication] = []
         
         for columnIndex in 0..<circuit.count {
@@ -74,6 +76,17 @@ class Constants {
                     }
                     
                     column[qNum] = "0"
+                } else if (column[qNum].hasPrefix("R")) {
+                    let mSide = column[qNum].split(separator: "(")[1]
+                    
+                    let m = Int(mSide.dropLast())!
+                    
+                    let lambda = convert(toLambda: m)
+                    
+                    let app = GateApplication(id: "u1(\(lambda))", target: qNum, control: [])
+                    gateApps.append(app)
+                    
+                    column[qNum] = "0"
                 }
             }
             
@@ -87,6 +100,13 @@ class Constants {
         }
         
         return gateApps
+    }
+    
+    private static func convert(toLambda m: Int) -> Double {
+        let num = 2.0 * Double.pi
+        let denom = pow(2.0, Double(m))
+        
+        return num/denom
     }
     
     struct GateApplication {
