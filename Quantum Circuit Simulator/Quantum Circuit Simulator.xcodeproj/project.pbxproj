@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9470586C25FB935400F28215 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 9470586B25FB935400F28215 /* Numerics */; };
+		94778D3225FE8C05002AD920 /* BarChart in Frameworks */ = {isa = PBXBuildFile; productRef = 94778D3125FE8C05002AD920 /* BarChart */; };
 		9494506C2540972800E8E79C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506B2540972800E8E79C /* AppDelegate.swift */; };
 		9494506E2540972800E8E79C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506D2540972800E8E79C /* SceneDelegate.swift */; };
 		949450702540972800E8E79C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506F2540972800E8E79C /* ContentView.swift */; };
@@ -48,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9470586C25FB935400F28215 /* Numerics in Frameworks */,
+				94778D3225FE8C05002AD920 /* BarChart in Frameworks */,
 				9494DFD525AE1F0C00EF4894 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,6 +121,7 @@
 			packageProductDependencies = (
 				9494DFD425AE1F0C00EF4894 /* Alamofire */,
 				9470586B25FB935400F28215 /* Numerics */,
+				94778D3125FE8C05002AD920 /* BarChart */,
 			);
 			productName = "Quantum Circuit Simulator";
 			productReference = 949450682540972800E8E79C /* Quantum Circuit Simulator.app */;
@@ -150,6 +153,7 @@
 			packageReferences = (
 				9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				9470586A25FB935300F28215 /* XCRemoteSwiftPackageReference "swift-numerics" */,
+				94778D3025FE8C05002AD920 /* XCRemoteSwiftPackageReference "BarChart" */,
 			);
 			productRefGroup = 949450692540972800E8E79C /* Products */;
 			projectDirPath = "";
@@ -395,6 +399,14 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		94778D3025FE8C05002AD920 /* XCRemoteSwiftPackageReference "BarChart" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dawigr/BarChart.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
 		9494DFD325AE1F0C00EF4894 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -410,6 +422,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9470586A25FB935300F28215 /* XCRemoteSwiftPackageReference "swift-numerics" */;
 			productName = Numerics;
+		};
+		94778D3125FE8C05002AD920 /* BarChart */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94778D3025FE8C05002AD920 /* XCRemoteSwiftPackageReference "BarChart" */;
+			productName = BarChart;
 		};
 		9494DFD425AE1F0C00EF4894 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
