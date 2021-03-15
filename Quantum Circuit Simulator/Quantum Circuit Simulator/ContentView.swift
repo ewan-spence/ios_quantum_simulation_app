@@ -6,6 +6,7 @@
 
 import SwiftUI
 import Alamofire
+import BarChart
 
 struct ContentView: View {
 	@State var gates: [String] = Constants.gates
@@ -46,7 +47,11 @@ struct ContentView: View {
 	@State var m: String?
 	@State var circIndex: CGPoint?
 	
+	@State var isShowingCircuit: Bool = true
+	@State var results: [String: Int] = [:]
+	
 	var body: some View {
+		if isShowingCircuit {
 		ZStack{
 			VStack {
 				Divider()
@@ -95,6 +100,67 @@ struct ContentView: View {
 				circuit[Int(circIndex!.x)][Int(circIndex!.y)] = "R(\(m!))"
 			})
 		})
+		} else {
+			let config = ChartConfiguration()
+			
+			VStack {
+				HStack {
+					Button("< Back", action: {isShowingCircuit = true})
+						.padding()
+					Spacer()
+				}
+				
+			BarChartView(config: config)
+				.onAppear() {
+					addZeroValues(&results)
+					let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
+					
+					config.data.entries = arrayToDataEntries(sortedResults)
+				}
+				.padding()
+			}
+		}
+	}
+	
+	func addZeroValues(_ res: inout [String: Int])  {
+		let numWires = circuit[0].count
+				
+		var allBinaryStrings = [String]()
+		var initialString = ""
+		
+		genBinaryStrings(numWires, &initialString, 0, &allBinaryStrings)
+		
+		for str in allBinaryStrings {
+			if !res.keys.contains(str) {
+				res[str] = 0
+			}
+		}
+	}
+	
+	func genBinaryStrings(_ strLen: Int, _ string: inout String, _ i: Int, _ array: inout [String]) {
+		if i == strLen {
+			array.append(string)
+			return
+		}
+		
+		let originalString = string
+		
+		string.append("0")
+		genBinaryStrings(strLen, &string, i + 1, &array)
+		
+		string = originalString
+		string.append("1")
+		genBinaryStrings(strLen, &string, i + 1, &array)
+	}
+	 
+	func arrayToDataEntries(_ array : Array<(key: String, value: Int)>) -> [ChartDataEntry] {
+		var out: [ChartDataEntry] = []
+		
+		for entry in array {
+			out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
+		}
+		
+		return out
 	}
 	
 	func submitToApi() {
@@ -106,7 +172,13 @@ struct ContentView: View {
 			
 			switch response.result {
 			case let .success(value):
-				debugPrint(value)
+				guard let json = value as? [String: Int] else {
+					alert = Alert(title: Text("API Error"), message: Text("There was an error contacting the API.\nPlease try again."), dismissButton: .default(Text("Okay")))
+					return
+				}
+				
+				results = json
+				isShowingCircuit = false
 				break
 				
 			case let .failure(error):
