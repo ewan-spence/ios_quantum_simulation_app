@@ -7,6 +7,7 @@
 
 import Foundation
 import Numerics
+import BarChart
 
 class Constants {
     static let gates = ["H", "X", "CX", "CCX", "R(m)"]
@@ -107,6 +108,49 @@ class Constants {
         let denom = pow(2.0, Double(m))
         
         return num/denom
+    }
+    
+    
+    
+    static func addZeroValues(_ res: inout [String: Int], circuit: [[String]])  {
+        let numWires = circuit[0].count
+                
+        var allBinaryStrings = [String]()
+        var initialString = ""
+        
+        genBinaryStrings(numWires, &initialString, 0, &allBinaryStrings)
+        
+        for str in allBinaryStrings {
+            if !res.keys.contains(str) {
+                res[str] = 0
+            }
+        }
+    }
+    
+    static func genBinaryStrings(_ strLen: Int, _ string: inout String, _ i: Int, _ array: inout [String]) {
+        if i == strLen {
+            array.append(string)
+            return
+        }
+        
+        let originalString = string
+        
+        string.append("0")
+        genBinaryStrings(strLen, &string, i + 1, &array)
+        
+        string = originalString
+        string.append("1")
+        genBinaryStrings(strLen, &string, i + 1, &array)
+    }
+     
+    static func arrayToDataEntries(_ array : Array<(key: String, value: Int)>) -> [ChartDataEntry] {
+        var out: [ChartDataEntry] = []
+        
+        for entry in array {
+            out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
+        }
+        
+        return out
     }
     
     struct GateApplication {
