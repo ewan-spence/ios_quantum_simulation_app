@@ -34,7 +34,7 @@ struct Gate: View {
                             .frame(width: 1, height: CGFloat((targetQNum - qNum)) * 50)
                     }
                 }
-                .background(Color.white)
+                .background(Color("primary"))
                 .padding(.leading)
                 .contextMenu(ContextMenu(menuItems: {
                     Button("Delete Gate", action: deleteGate)
@@ -48,11 +48,11 @@ struct Gate: View {
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 10.0)
-                        .stroke(Color.secondary)
+                        .stroke(Color("secondary"))
                         .frame(width: 50, height: 50)
                         .overlay(Text(gateName))
                 }
-                .background(Color.white)
+                .background(Color("primary"))
                 .padding(.leading)
                 .contextMenu(ContextMenu(menuItems: {
                     Button("Delete Gate", action: deleteGate)
@@ -64,12 +64,12 @@ struct Gate: View {
             GeometryReader { geo in
                 ZStack {
                     RoundedRectangle(cornerRadius: 10.0)
-                        .stroke(Color.secondary)
+                        .stroke(Color("secondary"))
                         .frame(width: 50, height: 50)
                         .overlay(Text(gateName))
                     
                 }
-                .background(Color.white)
+                .background(Color("primary"))
                 .onDrag({
                     isDragging = true
                     draggedGate = gateName

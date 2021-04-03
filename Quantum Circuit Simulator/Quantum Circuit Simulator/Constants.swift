@@ -10,12 +10,10 @@ import Numerics
 import BarChart
 
 class Constants {
-    static let gates = ["H", "X", "CX", "CCX", "R(m)"]
-    static let names = ["H": "Hadamard", "X": "Pauli-X", "CX": "CNOT", "CCX": "Toffoli", "R(m)" : "Phase Gate"]
+    static let gates = ["H", "X", "R(m)"]
+    static let names = ["H": "Hadamard", "X": "Pauli-X", "R(m)" : "Phase Gate"]
     static let explanations = ["H": "This gate sets the probability of each state (|0> and |1>) to 0.5, making a value of 0 or 1 equally likely.",
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
-                               "CX": "This gate flips the target qubit if and only if the control qubit is ON.\nDrag this to the location of the Target qubit.",
-                               "CCX": "This gate flips the target qubit if and only if both control qubits are ON.\nDrag this to the location of the Target qubit.",
                                "R(m)": "This gate performs a rotation in the z-axis based on an angle determined by a parameter m."]
     
     static let url = "http://api.ewan-spence.com/execute/"
@@ -110,8 +108,6 @@ class Constants {
         return num/denom
     }
     
-    
-    
     static func addZeroValues(_ res: inout [String: Int], circuit: [[String]])  {
         let numWires = circuit[0].count
                 
@@ -147,7 +143,7 @@ class Constants {
         var out: [ChartDataEntry] = []
         
         for entry in array {
-            out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
+            out.append(ChartDataEntry(x: String(entry.key.reversed()), y: Double(entry.value)))
         }
         
         return out

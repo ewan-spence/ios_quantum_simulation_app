@@ -76,7 +76,7 @@ struct ContentView: View {
 							.padding()
 							.background(
 								RoundedRectangle(cornerRadius: 12)
-									.foregroundColor(.white)
+									.foregroundColor(Color("secondary"))
 							)
 							.padding(.trailing)
 					}
@@ -114,15 +114,21 @@ struct ContentView: View {
 					.multilineTextAlignment(.center)
 					.padding(.bottom)
 				
-				HStack {	
+				HStack {
 					BarChartView(config: config)
 						.onAppear() {
+							config.xAxis.ticksColor = Color("secondary")
+							config.xAxis.labelsColor = Color("secondary")
+							config.yAxis.ticksColor = Color("secondary")
+							config.yAxis.labelsColor = Color("secondary")
+							
 							Constants.addZeroValues(&results, circuit: circuit)
 							let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
 							
 							config.data.entries = Constants.arrayToDataEntries(sortedResults)
 						}
 						.padding()
+					
 					
 					Text("Number of measurements")
 						.rotationEffect(Angle(degrees: 90.0))

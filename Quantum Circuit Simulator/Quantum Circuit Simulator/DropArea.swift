@@ -16,7 +16,7 @@ struct DropArea: View {
             
             Image(systemName: "plus.app.fill")
                 .font(.system(size: 60))
-                .background(Color.white)
+                .background(Color("primary"))
                 .onAppear(perform: {
                     let placeholderCoords = CGRect(x: geo.frame(in: .global).minX, y: geo.frame(in: .global).minY, width: 60, height: 60)
                     if let _ = dropSpots[qNum] {
