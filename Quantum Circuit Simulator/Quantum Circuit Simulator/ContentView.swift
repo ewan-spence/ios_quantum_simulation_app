@@ -52,54 +52,54 @@ struct ContentView: View {
 	
 	var body: some View {
 		if isShowingCircuit {
-		ZStack{
-			VStack {
-				Divider()
+			ZStack{
+				VStack {
+					Divider()
+					
+					GateOptions(gates: gates, circuit: $circuit, isDragging: $isDragging, draggedGate: $draggedGate, originOfDrag: $originOfDrag, isAlerting: $isAlerting, alert: $alert)
+					
+					Divider()
+					
+					CircuitView(circuit: $circuit, dropSpots: $dropSpots, isDragging: $isDragging, draggedGate: $draggedGate)
+					
+					Spacer()
+				}
 				
-				GateOptions(gates: gates, circuit: $circuit, isDragging: $isDragging, draggedGate: $draggedGate, originOfDrag: $originOfDrag, isAlerting: $isAlerting, alert: $alert)
-				
-				Divider()
-				
-				CircuitView(circuit: $circuit, dropSpots: $dropSpots, isDragging: $isDragging, draggedGate: $draggedGate)
-				
-				Spacer()
-			}
-			
-			VStack {
-				
-				Spacer()
-				
-				HStack {
+				VStack {
+					
 					Spacer()
 					
-					Button("Execute", action: submitToApi)
-						.padding()
-						.background(
-							RoundedRectangle(cornerRadius: 12)
-								.foregroundColor(.white)
-						)
-						.padding(.trailing)
+					HStack {
+						Spacer()
+						
+						Button("Execute", action: submitToApi)
+							.padding()
+							.background(
+								RoundedRectangle(cornerRadius: 12)
+									.foregroundColor(.white)
+							)
+							.padding(.trailing)
+					}
 				}
 			}
-		}
-		.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag, pos: $circIndex, isAskingForM: $isAskingForM))
-		.onChange(of: circuit, perform: {_ in
-			
-			var numDeleted = 0
-			
-			for var colIndex in 1..<circuit.count {
-				colIndex = colIndex - numDeleted
-				if circuit[colIndex].elementsEqual(Array(repeating: "0", count: circuit[colIndex].count)) {
-					circuit.remove(at: colIndex)
-					numDeleted += 1
+			.onDrop(of: [.text], delegate: GateDropDelegate(dropSpots: dropSpots, circuit: $circuit, isDragging: $isDragging, draggedGate: draggedGate, originOfDrag: originOfDrag, pos: $circIndex, isAskingForM: $isAskingForM))
+			.onChange(of: circuit, perform: {_ in
+				
+				var numDeleted = 0
+				
+				for var colIndex in 1..<circuit.count {
+					colIndex = colIndex - numDeleted
+					if circuit[colIndex].elementsEqual(Array(repeating: "0", count: circuit[colIndex].count)) {
+						circuit.remove(at: colIndex)
+						numDeleted += 1
+					}
 				}
-			}
-		})
-		.textFieldAlert(isPresented: $isAskingForM, content: {
-			TextFieldAlert(title: "Enter a value for m", message: "", text: $m, action: {
-				circuit[Int(circIndex!.x)][Int(circIndex!.y)] = "R(\(m!))"
 			})
-		})
+			.textFieldAlert(isPresented: $isAskingForM, content: {
+				TextFieldAlert(title: "Enter a value for m", message: "", text: $m, action: {
+					circuit[Int(circIndex!.x)][Int(circIndex!.y)] = "R(\(m!))"
+				})
+			})
 		} else {
 			let config = ChartConfiguration()
 			
@@ -110,57 +110,30 @@ struct ContentView: View {
 					Spacer()
 				}
 				
-			BarChartView(config: config)
-				.onAppear() {
-					addZeroValues(&results)
-					let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
-					
-					config.data.entries = arrayToDataEntries(sortedResults)
-				}
-				.padding()
-			}
-		}
-	}
-	
-	func addZeroValues(_ res: inout [String: Int])  {
-		let numWires = circuit[0].count
+				Text("Chart of Measurements of Qubits after 1000 Shots")
+					.multilineTextAlignment(.center)
+					.padding(.bottom)
 				
-		var allBinaryStrings = [String]()
-		var initialString = ""
-		
-		genBinaryStrings(numWires, &initialString, 0, &allBinaryStrings)
-		
-		for str in allBinaryStrings {
-			if !res.keys.contains(str) {
-				res[str] = 0
+				HStack {	
+					BarChartView(config: config)
+						.onAppear() {
+							Constants.addZeroValues(&results, circuit: circuit)
+							let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
+							
+							config.data.entries = Constants.arrayToDataEntries(sortedResults)
+						}
+						.padding()
+					
+					Text("Number of measurements")
+						.rotationEffect(Angle(degrees: 90.0))
+						.padding(.trailing, -70)
+						.padding(.leading, -40)
+				}
+				
+				Text("Measured Values")
+					.multilineTextAlignment(.center)
 			}
 		}
-	}
-	
-	func genBinaryStrings(_ strLen: Int, _ string: inout String, _ i: Int, _ array: inout [String]) {
-		if i == strLen {
-			array.append(string)
-			return
-		}
-		
-		let originalString = string
-		
-		string.append("0")
-		genBinaryStrings(strLen, &string, i + 1, &array)
-		
-		string = originalString
-		string.append("1")
-		genBinaryStrings(strLen, &string, i + 1, &array)
-	}
-	 
-	func arrayToDataEntries(_ array : Array<(key: String, value: Int)>) -> [ChartDataEntry] {
-		var out: [ChartDataEntry] = []
-		
-		for entry in array {
-			out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
-		}
-		
-		return out
 	}
 	
 	func submitToApi() {
