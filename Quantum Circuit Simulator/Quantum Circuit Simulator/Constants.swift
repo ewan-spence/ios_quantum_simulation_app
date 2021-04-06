@@ -10,10 +10,12 @@ import Numerics
 import BarChart
 
 class Constants {
-    static let gates = ["H", "X", "R(m)"]
-    static let names = ["H": "Hadamard", "X": "Pauli-X", "R(m)" : "Phase Gate"]
+    static let gates = ["H", "X", "Y", "Z", "R(m)"]
+    static let names = ["H": "Hadamard", "X": "Pauli-X", "Y": "Pauli-Y", "Z": "Pauli-Z", "R(m)" : "Phase Gate"]
     static let explanations = ["H": "This gate sets the probability of each state (|0> and |1>) to 0.5, making a value of 0 or 1 equally likely.",
                                "X": "This gate is the equivalent of a Classical NOT gate. I.e, it flips the value of the input qubit.",
+                               "Y": "This explanation will be added shortly.", //TODO
+                               "Z": "This explanation will be added shortly.", //TODO
                                "R(m)": "This gate performs a rotation in the z-axis based on an angle determined by a parameter m."]
     
     static let url = "http://api.ewan-spence.com/execute/"

@@ -18,6 +18,7 @@
 		9494DFD125AE116800EF4894 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494DFD025AE116800EF4894 /* Constants.swift */; };
 		9494DFD525AE1F0C00EF4894 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 9494DFD425AE1F0C00EF4894 /* Alamofire */; };
 		9494DFD825AE20B000EF4894 /* DropArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494DFD725AE20B000EF4894 /* DropArea.swift */; };
+		94D3B4C6261C7EB0006CEB7E /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3B4C5261C7EB0006CEB7E /* SelectionIndicator.swift */; };
 		94DBAF1A25EFC5CC00865950 /* TextFieldAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94DBAF1925EFC5CC00865950 /* TextFieldAlertViewController.swift */; };
 		94E2B0422577CBB7000F7175 /* CircuitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E2B0412577CBB7000F7175 /* CircuitView.swift */; };
 		94E2B0492577CC04000F7175 /* GateOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E2B0482577CC04000F7175 /* GateOptions.swift */; };
@@ -36,6 +37,7 @@
 		949450792540972900E8E79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9494DFD025AE116800EF4894 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9494DFD725AE20B000EF4894 /* DropArea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropArea.swift; sourceTree = "<group>"; };
+		94D3B4C5261C7EB0006CEB7E /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		94DBAF1925EFC5CC00865950 /* TextFieldAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldAlertViewController.swift; sourceTree = "<group>"; };
 		94E2B0412577CBB7000F7175 /* CircuitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircuitView.swift; path = "Quantum Circuit Simulator/CircuitView.swift"; sourceTree = SOURCE_ROOT; };
 		94E2B0482577CC04000F7175 /* GateOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateOptions.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				9494506B2540972800E8E79C /* AppDelegate.swift */,
 				9494506D2540972800E8E79C /* SceneDelegate.swift */,
 				9494506F2540972800E8E79C /* ContentView.swift */,
+				94D3B4C5261C7EB0006CEB7E /* SelectionIndicator.swift */,
 				9494DFD025AE116800EF4894 /* Constants.swift */,
 				94E2B0412577CBB7000F7175 /* CircuitView.swift */,
 				9494DFD725AE20B000EF4894 /* DropArea.swift */,
@@ -190,6 +193,7 @@
 				94DBAF1A25EFC5CC00865950 /* TextFieldAlertViewController.swift in Sources */,
 				949450702540972800E8E79C /* ContentView.swift in Sources */,
 				94E2B04C2577D126000F7175 /* Gate.swift in Sources */,
+				94D3B4C6261C7EB0006CEB7E /* SelectionIndicator.swift in Sources */,
 				94E2B0492577CC04000F7175 /* GateOptions.swift in Sources */,
 				9494DFD125AE116800EF4894 /* Constants.swift in Sources */,
 			);

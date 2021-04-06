@@ -50,6 +50,11 @@ struct ContentView: View {
 	@State var isShowingCircuit: Bool = true
 	@State var results: [String: Int] = [:]
 	
+	
+	let selectionIndicatorHeight: CGFloat = 60
+	@State var selectedBarTopCentreLocation: CGPoint?
+	@State var selectedEntry: ChartDataEntry?
+	
 	var body: some View {
 		if isShowingCircuit {
 			ZStack{
@@ -115,20 +120,29 @@ struct ContentView: View {
 					.padding(.bottom)
 				
 				HStack {
-					BarChartView(config: config)
-						.onAppear() {
-							config.xAxis.ticksColor = Color("secondary")
-							config.xAxis.labelsColor = Color("secondary")
-							config.yAxis.ticksColor = Color("secondary")
-							config.yAxis.labelsColor = Color("secondary")
-							
-							Constants.addZeroValues(&results, circuit: circuit)
-							let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
-							
-							config.data.entries = Constants.arrayToDataEntries(sortedResults)
-						}
-						.padding()
 					
+					GeometryReader { proxy in
+						SelectableBarChartView<SelectionIndicator>(config: config)
+							.onBarSelection {entry, point in
+								self.selectedBarTopCentreLocation = point
+								self.selectedEntry = entry
+							}
+							.selectionView {
+								return SelectionIndicator(entry: self.selectedEntry, location: self.selectedBarTopCentreLocation)
+							}
+							.onAppear {
+								config.xAxis.ticksColor = Color("secondary")
+								config.xAxis.labelsColor = Color("secondary")
+								config.yAxis.ticksColor = Color("secondary")
+								config.yAxis.labelsColor = Color("secondary")
+								
+								Constants.addZeroValues(&results, circuit: circuit)
+								let sortedResults = Array(results).sorted(by: {$0.0 < $1.0})
+								
+								config.data.entries = Constants.arrayToDataEntries(sortedResults)
+							}
+							.padding()
+					}
 					
 					Text("Number of measurements")
 						.rotationEffect(Angle(degrees: 90.0))
