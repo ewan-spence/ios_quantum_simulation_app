@@ -48,7 +48,7 @@ struct ContentView: View {
 	@State var circIndex: CGPoint?
 	
 	@State var isShowingCircuit: Bool = true
-	@State var results: [String: Int] = [:]
+	@State var results: [String: Double] = [:]
 	
 	
 	let selectionIndicatorHeight: CGFloat = 60
@@ -167,7 +167,7 @@ struct ContentView: View {
 			
 			switch response.result {
 			case let .success(value):
-				guard let json = value as? [String: Int] else {
+				guard let json = value as? [String: Double] else {
 					alert = Alert(title: Text("API Error"), message: Text("There was an error contacting the API.\nPlease try again."), dismissButton: .default(Text("Okay")))
 					return
 				}

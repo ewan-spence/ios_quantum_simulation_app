@@ -110,7 +110,7 @@ class Constants {
         return num/denom
     }
     
-    static func addZeroValues(_ res: inout [String: Int], circuit: [[String]])  {
+    static func addZeroValues(_ res: inout [String: Double], circuit: [[String]])  {
         let numWires = circuit[0].count
                 
         var allBinaryStrings = [String]()
@@ -141,11 +141,11 @@ class Constants {
         genBinaryStrings(strLen, &string, i + 1, &array)
     }
      
-    static func arrayToDataEntries(_ array : Array<(key: String, value: Int)>) -> [ChartDataEntry] {
+    static func arrayToDataEntries(_ array : Array<(key: String, value: Double)>) -> [ChartDataEntry] {
         var out: [ChartDataEntry] = []
         
         for entry in array {
-            out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
+            out.append(ChartDataEntry(x: entry.key, y: entry.value))
         }
         
         return out
