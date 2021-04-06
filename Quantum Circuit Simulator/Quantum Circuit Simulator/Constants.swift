@@ -143,7 +143,7 @@ class Constants {
         var out: [ChartDataEntry] = []
         
         for entry in array {
-            out.append(ChartDataEntry(x: String(entry.key.reversed()), y: Double(entry.value)))
+            out.append(ChartDataEntry(x: entry.key, y: Double(entry.value)))
         }
         
         return out

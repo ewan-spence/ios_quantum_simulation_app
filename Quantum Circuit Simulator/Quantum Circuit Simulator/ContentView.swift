@@ -134,10 +134,12 @@ struct ContentView: View {
 						.rotationEffect(Angle(degrees: 90.0))
 						.padding(.trailing, -70)
 						.padding(.leading, -40)
+						.foregroundColor(Color("secondary"))
 				}
 				
 				Text("Measured Values")
 					.multilineTextAlignment(.center)
+					.foregroundColor(Color("secondary"))
 			}
 		}
 	}
