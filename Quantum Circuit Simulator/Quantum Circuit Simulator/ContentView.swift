@@ -50,7 +50,6 @@ struct ContentView: View {
 	@State var isShowingCircuit: Bool = true
 	@State var results: [String: Double] = [:]
 	
-	
 	let selectionIndicatorHeight: CGFloat = 60
 	@State var selectedBarTopCentreLocation: CGPoint?
 	@State var selectedEntry: ChartDataEntry?
@@ -115,7 +114,7 @@ struct ContentView: View {
 					Spacer()
 				}
 				
-				Text("Chart of Measurements of Qubits after 1000 Shots")
+				Text("Chart of Measurement Probability of Qubits after 1000 Shots")
 					.multilineTextAlignment(.center)
 					.padding(.bottom)
 				
@@ -144,7 +143,7 @@ struct ContentView: View {
 							.padding()
 					}
 					
-					Text("Number of measurements")
+					Text("% of Measurements")
 						.rotationEffect(Angle(degrees: 90.0))
 						.padding(.trailing, -70)
 						.padding(.leading, -40)
@@ -169,6 +168,7 @@ struct ContentView: View {
 			case let .success(value):
 				guard let json = value as? [String: Double] else {
 					alert = Alert(title: Text("API Error"), message: Text("There was an error contacting the API.\nPlease try again."), dismissButton: .default(Text("Okay")))
+					isAlerting = true
 					return
 				}
 				
@@ -177,8 +177,9 @@ struct ContentView: View {
 				break
 				
 			case let .failure(error):
-				debugPrint(error)
-				break
+				alert = Alert(title: Text("API Error"), message: Text("There was an error contacting the API.\nPlease try again.\nError message: \(error.errorDescription ?? "Unknown")"), dismissButton: .default(Text("Okay")))
+				isAlerting = true
+				return
 			}
 		}
 		
