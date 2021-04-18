@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		946947F22629D919001BB831 /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946947F12629D919001BB831 /* ResultsView.swift */; };
+		946947F5262A3C4B001BB831 /* GateDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946947F4262A3C4B001BB831 /* GateDropDelegate.swift */; };
 		9470586C25FB935400F28215 /* Numerics in Frameworks */ = {isa = PBXBuildFile; productRef = 9470586B25FB935400F28215 /* Numerics */; };
 		94778D3225FE8C05002AD920 /* BarChart in Frameworks */ = {isa = PBXBuildFile; productRef = 94778D3125FE8C05002AD920 /* BarChart */; };
 		9494506C2540972800E8E79C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494506B2540972800E8E79C /* AppDelegate.swift */; };
@@ -27,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		946947F12629D919001BB831 /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		946947F4262A3C4B001BB831 /* GateDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GateDropDelegate.swift; sourceTree = "<group>"; };
 		949450682540972800E8E79C /* Quantum Circuit Simulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quantum Circuit Simulator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9494506B2540972800E8E79C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9494506D2540972800E8E79C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,8 @@
 				9494506B2540972800E8E79C /* AppDelegate.swift */,
 				9494506D2540972800E8E79C /* SceneDelegate.swift */,
 				9494506F2540972800E8E79C /* ContentView.swift */,
+				946947F4262A3C4B001BB831 /* GateDropDelegate.swift */,
+				946947F12629D919001BB831 /* ResultsView.swift */,
 				94D3B4C5261C7EB0006CEB7E /* SelectionIndicator.swift */,
 				9494DFD025AE116800EF4894 /* Constants.swift */,
 				94E2B0412577CBB7000F7175 /* CircuitView.swift */,
@@ -186,12 +192,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				9494DFD825AE20B000EF4894 /* DropArea.swift in Sources */,
+				946947F22629D919001BB831 /* ResultsView.swift in Sources */,
 				9494506C2540972800E8E79C /* AppDelegate.swift in Sources */,
 				9494506E2540972800E8E79C /* SceneDelegate.swift in Sources */,
 				94E2B04F2577D8B9000F7175 /* Wire.swift in Sources */,
 				94E2B0422577CBB7000F7175 /* CircuitView.swift in Sources */,
 				94DBAF1A25EFC5CC00865950 /* TextFieldAlertViewController.swift in Sources */,
 				949450702540972800E8E79C /* ContentView.swift in Sources */,
+				946947F5262A3C4B001BB831 /* GateDropDelegate.swift in Sources */,
 				94E2B04C2577D126000F7175 /* Gate.swift in Sources */,
 				94D3B4C6261C7EB0006CEB7E /* SelectionIndicator.swift in Sources */,
 				94E2B0492577CC04000F7175 /* GateOptions.swift in Sources */,

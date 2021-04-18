@@ -56,42 +56,10 @@ class Constants {
         
         for columnIndex in 0..<circuit.count {
             var column = circuit[columnIndex]
-            
-            var appMap: [Int: Int] = [:]
-            
+                        
             for qNum in 0..<column.count {
-                if (column[qNum].hasPrefix(".")) {
-                    let targetQNum = Int(column[qNum].suffix(1))!
-                    
-                    if (appMap.keys.contains(targetQNum)) {                        
-                        gateApps[appMap[targetQNum]!].control.append(qNum)
-                    } else {
-                        let id = column[targetQNum].lowercased()
-                        
-                        let app = GateApplication(id: id, target: targetQNum, control: [qNum])
-                        
-                        gateApps.append(app)
-                        appMap[targetQNum] = gateApps.count-1
-                        
-                        column[targetQNum] = "0"
-                    }
-                    
-                    column[qNum] = "0"
-                } else if (column[qNum].hasPrefix("R")) {
-                    let mSide = column[qNum].split(separator: "(")[1]
-                    
-                    let m = Int(mSide.dropLast())!
-                    
-                    let lambda = convert(toLambda: m)
-                    
-                    let app = GateApplication(id: "u1(\(lambda))", target: qNum, control: [])
-                    gateApps.append(app)
-                    
-                    column[qNum] = "0"
-                }
-            }
-            
-            for qNum in 0..<column.count {
+                column = handleSpecialGates(column, &gateApps)
+                
                 let gate = column[qNum]
                 
                 if gate != "0" {
@@ -101,6 +69,54 @@ class Constants {
         }
         
         return gateApps
+    }
+    
+    private static func handleControl(_ column: inout [String], _ gateApps: inout [GateApplication], _ appMap: inout [Int: Int], _ qNum: Int) -> Void {
+        let targetQNum = Int(column[qNum].suffix(1))!
+        
+        if (appMap.keys.contains(targetQNum)) {
+            gateApps[appMap[targetQNum]!].control.append(qNum)
+        } else {
+            let id = column[targetQNum].lowercased()
+            
+            let app = GateApplication(id: id, target: targetQNum, control: [qNum])
+            
+            gateApps.append(app)
+            appMap[targetQNum] = gateApps.count-1
+            
+            column[targetQNum] = "0"
+        }
+        
+        column[qNum] = "0"
+    }
+    
+    private static func handlePhase(_ column: inout [String], _ gateApps: inout [GateApplication], _ qNum: Int) -> Void {
+        let mSide = column[qNum].split(separator: "(")[1]
+        
+        let m = Int(mSide.dropLast())!
+        
+        let lambda = convert(toLambda: m)
+        
+        let app = GateApplication(id: "u1(\(lambda))", target: qNum, control: [])
+        gateApps.append(app)
+        
+        column[qNum] = "0"
+    }
+    
+    private static func handleSpecialGates(_ column: [String], _ gateApps: inout [GateApplication]) -> [String]{
+        var appMap: [Int: Int] = [:]
+        
+        var mutatingColumn = column
+        
+        for qNum in 0..<column.count {
+            if (column[qNum].hasPrefix(".")) {
+                handleControl(&mutatingColumn, &gateApps, &appMap, qNum)
+                
+            } else if (mutatingColumn[qNum].hasPrefix("R")) {
+                handlePhase(&mutatingColumn, &gateApps, qNum)
+            }
+        }
+        return mutatingColumn
     }
     
     private static func convert(toLambda m: Int) -> Double {
@@ -141,10 +157,15 @@ class Constants {
         genBinaryStrings(strLen, &string, i + 1, &array)
     }
      
-    static func arrayToDataEntries(_ array : Array<(key: String, value: Double)>) -> [ChartDataEntry] {
+    static func dictToDataEntries(_ dictionary : [String: Double], _ circuit: [[String]]) -> [ChartDataEntry] {
+        var updatedDict = dictionary
+        
+        addZeroValues(&updatedDict, circuit: circuit)
+        let sortedResults = Array(updatedDict).sorted(by: {$0.0 < $1.0})
+        
         var out: [ChartDataEntry] = []
         
-        for entry in array {
+        for entry in sortedResults {
             out.append(ChartDataEntry(x: entry.key, y: entry.value))
         }
         
